@@ -1,22 +1,40 @@
-﻿using System.ComponentModel;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using MaterialsCreate.Manage;
-using Microsoft.Win32;
+using Tommy;
+using Wpf.Ui.Controls;
 
 namespace MaterialsCreate;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow
 {
     public MainWindow()
     {
         InitializeComponent();
         DataContext = this;
-        
+        LoadComboBoxItems();
+    }
+
+    //加载下拉框数据
+    private void LoadComboBoxItems()
+    {
+        var configPath = "Config/config.toml";
+        if (File.Exists(configPath))
+        {
+            TextReader reader = new StreamReader(configPath);
+            var table = TOML.Parse(reader);
+
+            foreach (var key in table.Keys)
+            {
+                GameComboBox.Items.Add(new ComboBoxItem { Content = key });
+            }
+        }else
+        {
+            Message.ShowSnack("错误", "配置文件被删除！。", ControlAppearance.Danger,
+                new SymbolIcon(SymbolRegular.ErrorCircle20), 3);
+        }
     }
 
     readonly Dictionary<string, List<string>> pbrMap = new()
@@ -29,7 +47,7 @@ public partial class MainWindow
         ["SelfIllum"] = new() { "_selfillum", "_illum", "_glowmask", "_emit", "_emissive", "_light" },
         ["Opacity"] = new() { "_translucent", "_trans", "_opacity", "_opa", "_alpha" },
     };
-
+    // 创建 vmat 文件
     private void CreateVmat(object sender, RoutedEventArgs e)
     {
         // 获取 materials 文件夹下所有子文件夹
@@ -144,30 +162,80 @@ public partial class MainWindow
         Message.ShowSnack();
         LogManage.AddLog("所有 vmat 文件已创建完成。");
 
-        string MatchType(string filename)
-        {
-            var lowerName = Path.GetFileNameWithoutExtension(filename);
-            foreach (var (type, suffixes) in pbrMap)
-            {
-                foreach (var suffix in suffixes)
-                {
-                    if (lowerName.Contains(suffix))
-                        return type;
-                }
-            }
-            return null;
-        }
+        
     }
-
+    //匹配文件类型
+    string MatchType(string filename)
+    {
+        var fileName = Path.GetFileNameWithoutExtension(filename);
+        foreach (var (type, suffixes) in pbrMap)
+        {
+            foreach (var suffix in suffixes)
+            {
+                if (fileName.Contains(suffix))
+                    return type;
+            }
+        }
+        return null;
+    }
+    // 清除日志
     private void ClearLog(object sender, MouseButtonEventArgs e)
     {
         LogManage.Clear();
     }
-
+    // 打开设置窗口
     private void OpenSetting(object sender, MouseButtonEventArgs e)
     {
         var settingWindow = new Setting();
         settingWindow.ShowDialog();
     }
-    
+    // 打开 materials 文件夹
+    private void OpenDir(object sender, RoutedEventArgs e)
+    {
+       // 打开 materials 文件夹
+        var folderPath = "materials";
+        if (Directory.Exists(folderPath))
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = folderPath,
+                UseShellExecute = true
+            });
+        }
+        else
+        {
+            LogManage.AddLog("materials 文件夹不存在，请先创建。");
+            Message.ShowSnack("错误", "materials 文件夹不存在，请先创建。", ControlAppearance.Danger,
+                new SymbolIcon(SymbolRegular.ErrorCircle20), 3);
+        }
+    }
+    //下拉框选择
+    private void GameComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (GameComboBox.SelectedItem is ComboBoxItem selectedItem && selectedItem.Content != null)
+        {
+            var selectGame = selectedItem.Content.ToString() ?? throw new InvalidOperationException();
+            // 读取配置文件
+            var configPath = "Config/config.toml";
+            if (!File.Exists(configPath)) return;
+
+            TextReader reader = new StreamReader(configPath);
+            var table = TOML.Parse(reader);
+
+            if (table[selectGame] is TomlTable gameSection &&
+                gameSection["Shader"] is TomlArray shaderArray)
+            {
+                ShaderComboBox.Items.Clear();
+
+                foreach (var shader in shaderArray)
+                {
+                    ShaderComboBox.Items.Add(new ComboBoxItem
+                    {
+                        Content = shader.ToString()
+                    });
+                }
+                ShaderComboBox.SelectedIndex = 0;
+            }
+        }
+    }
 }

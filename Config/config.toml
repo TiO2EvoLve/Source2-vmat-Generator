@@ -1,0 +1,10 @@
+
+[Sbox]
+Shader = ["Complex", "Unlit"]
+SSR = true
+
+[CS2]
+Shader = ["Complex","Environment"]
+SSR = false
+
+

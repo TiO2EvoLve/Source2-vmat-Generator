@@ -1,0 +1,9 @@
+{
+  "BaseColor": ["_albedo", "_diffuse", "_basecolor", "_color", "_col", "_bc", "_diff"],
+  "Normal": ["_normal", "_nor", "_norm"],
+  "Roughness": ["_roughness", "_rough"],
+  "AO": ["_ao", "_ambientocclusion"],
+  "Metal": ["_metal", "_metallic"],
+  "SelfIllum": ["_emit", "_emissive"],
+  "Opacity": ["_alpha", "_opacity"]
+}

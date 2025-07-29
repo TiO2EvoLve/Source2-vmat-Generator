@@ -8,57 +8,68 @@
         WindowStartupLocation="CenterScreen"
         Title="Setting" Height="600" Width="800">
     <Grid>
-        <TabControl Margin="20">
-            <TabItem IsSelected="True">
-                <TabItem.Header>
-                    <TextBlock Text="材质匹配配置" />
-                </TabItem.Header>
-                <ui:CardControl Margin="10">
-                    <ui:CardControl.Header>
-                        <StackPanel VerticalAlignment="Top">
-                            <StackPanel Orientation="Horizontal" Margin="0,5">
-                                <TextBlock Text="漫反射贴图" Width="70" FontSize="13" VerticalAlignment="Center" />
-                                <TextBox Width="400" Height="35" Margin="10,0,0,0" />
+        <Border BorderBrush="#FFF6F6F6" BorderThickness="5" CornerRadius="10,10,10,10" Margin="20"
+                Background="#FFFEFEFE">
+            <TabControl Margin="20">
+                <TabItem IsSelected="True">
+                    <TabItem.Header>
+                        <TextBlock Text="材质匹配配置" />
+                    </TabItem.Header>
+                    <ui:CardControl Margin="10" VerticalAlignment="Top">
+                        <ui:CardControl.Header>
+                            <StackPanel VerticalAlignment="Top">
+                                <StackPanel Orientation="Horizontal" Margin="0,5">
+                                    <TextBlock Text="漫反射贴图" Width="90" VerticalAlignment="Center" />
+                                    <TextBox Text="{Binding BaseColor, UpdateSourceTrigger=PropertyChanged}"
+                                             Width="550" Height="35" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,5">
+                                    <TextBlock Text="法线贴图" Width="90" VerticalAlignment="Center" />
+                                    <TextBox Text="{Binding Normal, UpdateSourceTrigger=PropertyChanged}" Width="550"
+                                             Height="35" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,5">
+                                    <TextBlock Text="粗糙度贴图" Width="90" VerticalAlignment="Center" />
+                                    <TextBox Text="{Binding Roughness, UpdateSourceTrigger=PropertyChanged}"
+                                             Width="550" Height="35" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,5">
+                                    <TextBlock Text="AO贴图" Width="90" VerticalAlignment="Center" />
+                                    <TextBox Text="{Binding AO, UpdateSourceTrigger=PropertyChanged}" Width="550"
+                                             Height="35" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,5">
+                                    <TextBlock Text="金属度贴图" Width="90" VerticalAlignment="Center" />
+                                    <TextBox Text="{Binding Metal, UpdateSourceTrigger=PropertyChanged}" Width="550"
+                                             Height="35" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,5">
+                                    <TextBlock Text="自发光贴图" Width="90" VerticalAlignment="Center" />
+                                    <TextBox Text="{Binding SelfIllum, UpdateSourceTrigger=PropertyChanged}"
+                                             Width="550" Height="35" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,5">
+                                    <TextBlock Text="透明度贴图" Width="90" VerticalAlignment="Center" />
+                                    <TextBox Text="{Binding Opacity, UpdateSourceTrigger=PropertyChanged}" Width="550"
+                                             Height="35" />
+                                </StackPanel>
+                                <Button HorizontalAlignment="Center" Content="保存配置" Width="100" Margin="10" Click="OnSaveClicked"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,5">
-                                <TextBlock Text="法线贴图" Width="70" FontSize="13" VerticalAlignment="Center" />
-                                <TextBox Width="400" Height="35"  Margin="10,0,0,0" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,5">
-                                <TextBlock Text="粗糙度贴图" Width="70" FontSize="13" VerticalAlignment="Center" />
-                                <TextBox Width="400" Height="35"  Margin="10,0,0,0" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,5">
-                                <TextBlock Text="AO贴图" Width="70" FontSize="13" VerticalAlignment="Center" />
-                                <TextBox Width="400" Height="35" Margin="10,0,0,0" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,5">
-                                <TextBlock Text="金属度贴图" Width="70" FontSize="13" VerticalAlignment="Center" />
-                                <TextBox Width="400" Height="35"  Margin="10,0,0,0" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,5">
-                                <TextBlock Text="自发光贴图" Width="70" FontSize="13" VerticalAlignment="Center" />
-                                <TextBox Width="400" Height="35"  Margin="10,0,0,0" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,5">
-                                <TextBlock Text="透明度贴图" Width="70" FontSize="13" VerticalAlignment="Center" />
-                                <TextBox Width="400" Height="35" Margin="10,0,0,0" />
-                            </StackPanel>
+                        </ui:CardControl.Header>
+                    </ui:CardControl>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Margin="0,0,6,0" Symbol="StoreMicrosoft16" />
+                            <TextBlock Text="清理逻辑配置" />
                         </StackPanel>
-                    </ui:CardControl.Header>
-                </ui:CardControl>
-            </TabItem>
-            <TabItem>
-                <TabItem.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <ui:SymbolIcon Margin="0,0,6,0" Symbol="StoreMicrosoft16" />
-                        <TextBlock Text="清理逻辑配置" />
-                    </StackPanel>
-                </TabItem.Header>
-                <Grid>
-                    <TextBlock Margin="12" Text="Is a lie." />
-                </Grid>
-            </TabItem>
-        </TabControl>
+                    </TabItem.Header>
+                    <Grid>
+                        <TextBox Width="100"></TextBox>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Border>
     </Grid>
 </Window>

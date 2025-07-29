@@ -9,6 +9,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="Tommy" Version="3.1.2" />
       <PackageReference Include="WPF-UI" Version="4.0.3" />
     </ItemGroup>
 
@@ -36,6 +38,12 @@
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Remove="materials\metal_01\corrugated_iron_metal_1k.png" />
+      <None Update="Config\config.toml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Config\FileType.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

@@ -33,7 +33,7 @@ public class Message
         var uiMessageBox = new MessageBox
         {
             Title = "成功",
-            Content = "文件已保存到桌面",
+            Content = "文件生成成功",
             CloseButtonText = "确定"
         };
         uiMessageBox.ShowDialogAsync();
@@ -55,7 +55,7 @@ public class Message
     public static void ShowSnack()
     {
         snackbarService.Show("成功",
-            "文件已保存到桌面",
+            "文件生成成功",
             ControlAppearance.Success,
             new SymbolIcon(SymbolRegular.Checkmark20), TimeSpan.FromSeconds(3));
     }

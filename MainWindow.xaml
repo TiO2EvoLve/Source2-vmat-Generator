@@ -11,8 +11,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="8*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <!-- 第一行标题 -->
         <ui:TextBlock Grid.Row="0" Margin="10" FontTypography="TitleLarge" Text="材质批量生成器" HorizontalAlignment="Center"
@@ -24,91 +24,93 @@
                 </LinearGradientBrush>
             </ui:TextBlock.Foreground>
         </ui:TextBlock>
-        
-        <!-- 第一行操作区 -->
-        <ui:CardControl Grid.Row="1" Margin="10">
-            <ui:CardControl.Header>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Horizontal">
-                        <ComboBox
-                            HorizontalAlignment="Left"
-                            SelectedIndex="0">
-                            <ComboBoxItem Content="请选择游戏" DataContext="" />
-                            <ComboBoxItem Content="CS2" IsSelected="True" />
-                            <ComboBoxItem Content="Sbox" />
-                            <ComboBoxItem Content="" />
-                        </ComboBox>
-                        <ComboBox
-                            Margin="10,0,0,0"
-                            HorizontalAlignment="Left"
-                            SelectedIndex="0">
-                            <ComboBoxItem Content="请选择Shader" DataContext="" />
-                            <ComboBoxItem Content="Complex" IsSelected="True" />
-                            <ComboBoxItem Content="Unlit" />
-                            <ComboBoxItem Content="" />
-                        </ComboBox>
-                    </StackPanel>
-                    
-                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" FontSize="15">SSR</TextBlock>
-                        <CheckBox />
-                        <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" FontSize="15"></TextBlock>
-                        <ui:ToggleSwitch/>
-                    </StackPanel>
-                    
-                    <ui:Button Grid.Column="2"
-                               Background="#FF409EFF"
-                               Content="检查文件"
-                               MouseOverBackground="#66b1ff"
-                               Margin="10,0,0,0"
-                               Foreground="#E4FFFFFF"/>
-                    <ui:Button Grid.Column="3"
-                               Background="#67C23A"
-                               Content="创建材质"
-                               MouseOverBackground="#A8E063"
-                               Margin="10,0,0,0"
-                               Foreground="#E4FFFFFF"
-                               Click="CreateVmat" />
-                    <ui:Button
-                        Grid.Column="4"
-                        Background="#E6A23C"
-                        Content="清理目录"
-                        MouseOverBackground="#ffbc58"
-                        Margin="10,0,10,0" Foreground="#E4FFFFFF"/>
-                    <ui:SymbolIcon MouseDown="OpenSetting" Grid.Column="5" Symbol="Settings48" FontSize="24" Margin="10,0,0,0"></ui:SymbolIcon>
-                </Grid>
-            </ui:CardControl.Header>
-        </ui:CardControl>
-        <!-- 第三行日志 -->
-        <ui:CardControl Grid.Row="2" Margin="10">
-            <ui:CardControl.Header>
-                <StackPanel Grid.Row="1" MinHeight="300" MinWidth="700">
-                    <RichTextBox x:Name="log_text" Background="GhostWhite" MinHeight="300" MinWidth="700" IsReadOnly="True">
-                        <FlowDocument>
-                            <Paragraph LineHeight="5" FontFamily="Microsoft YaHei" FontSize="12" />
-                        </FlowDocument>
-                    </RichTextBox>
-                    <Canvas>
-                        <ui:SymbolIcon MouseDown="ClearLog" Symbol="Clipboard32" Canvas.Right="20"
-                                       Canvas.Bottom="20" />
-                    </Canvas>
+        <!-- 第二行操作区 -->
+        <Border Grid.Row="1" BorderBrush="#FFF6F6F6" BorderThickness="2" CornerRadius="5,5,5,5" Margin="10"
+                Background="#FFFEFEFE">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <ui:TextBlock Text="选择游戏：" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <ComboBox
+                        x:Name="GameComboBox"
+                        SelectionChanged="GameComboBox_SelectionChanged"
+                        HorizontalAlignment="Left"
+                        SelectedIndex="0">
+                    </ComboBox>
+                    <ui:TextBlock Text="选择Shader：" VerticalAlignment="Center" Margin="10,0,0,0" />
+                    <ComboBox
+                        x:Name="ShaderComboBox"
+                        Margin="10,0,0,0"
+                        HorizontalAlignment="Left"
+                        SelectedIndex="0">
+                    </ComboBox>
                     
                 </StackPanel>
-            </ui:CardControl.Header>
-        </ui:CardControl>
-        <!-- 第四行提示幅 -->
-        <StackPanel Grid.Row="3" Width="800" HorizontalAlignment="Right">
-            <ui:SnackbarPresenter x:Name="SnackbarPresenter" x:FieldModifier="public" />
-            <ContentPresenter x:Name="RootContentDialog" x:FieldModifier="public" />
-        </StackPanel>
 
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+
+                </StackPanel>
+
+                <ui:Button Grid.Column="2"
+                           Background="#FF409EFF"
+                           Click="CreateVmat"
+                           Content="创建材质"
+                           MouseOverBackground="#66b1ff"
+                           Margin="10,0,0,0"
+                           Foreground="#E4FFFFFF" />
+                <ui:Button Grid.Column="3"
+                           Background="#67C23A"
+                           Content="打开目录"
+                           Click="OpenDir"
+                           MouseOverBackground="#A8E063"
+                           Margin="10,0,0,0"
+                           Foreground="#E4FFFFFF" />
+                <ui:Button
+                    Grid.Column="4"
+                    Background="#E6A23C"
+                    Content="清理目录"
+                    MouseOverBackground="#ffbc58"
+                    Margin="10,0,10,0" Foreground="#E4FFFFFF" />
+                <ui:SymbolIcon MouseDown="OpenSetting" Grid.Column="5" Symbol="Settings48" FontSize="24"
+                               Margin="10,0,0,0">
+                </ui:SymbolIcon>
+            </Grid>
+        </Border>
+        <!-- 第三行日志 -->
+        <Border Grid.Row="2" BorderBrush="#FFF6F6F6" BorderThickness="2" CornerRadius="5,5,5,5" Margin="10"
+                Background="#FFFEFEFE">
+            <Grid Margin="10">
+                <RichTextBox x:Name="log_text"
+                             Background="FloralWhite"
+                             VerticalAlignment="Stretch"
+                             HorizontalAlignment="Stretch"
+                             IsReadOnly="True"
+                             VerticalScrollBarVisibility="Auto">
+                    <FlowDocument>
+                        <Paragraph LineHeight="5" FontFamily="Microsoft YaHei" FontSize="12" />
+                    </FlowDocument>
+                </RichTextBox>
+                <!-- 图标用 Canvas 绝对定位 -->
+                <Canvas>
+                    <ui:SnackbarPresenter x:Name="SnackbarPresenter" x:FieldModifier="public" Canvas.Right="5"
+                                          Canvas.Top="5" />
+                    <ContentPresenter x:Name="RootContentDialog" x:FieldModifier="public" Canvas.Right="5"
+                                      Canvas.Top="5" />
+                </Canvas>
+                <Canvas>
+                    <ui:SymbolIcon MouseDown="ClearLog" Symbol="Clipboard32"
+                                   Canvas.Right="20" Canvas.Bottom="20" />
+                </Canvas>
+            </Grid>
+        </Border>
+        <!-- 第四行提示幅 -->
+        <Grid Grid.Row="3"><CheckBox Content="SSR"/></Grid>
     </Grid>
 </Window>
