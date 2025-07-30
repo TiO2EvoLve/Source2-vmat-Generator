@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MaterialsCreate.Manage;
+using Newtonsoft.Json;
 using Tommy;
 using Wpf.Ui.Controls;
 
@@ -37,16 +38,7 @@ public partial class MainWindow
         }
     }
 
-    readonly Dictionary<string, List<string>> pbrMap = new()
-    {
-        ["BaseColor"] = new() { "_albedo", "_diffuse", "_basecolor", "_color", "_col", "_bc", "_diff" },
-        ["AO"] = new() { "_ao", "_ambientocclusion", "_occlusion", "_ambocc", "_aoc", "_occl" },
-        ["Normal"] = new() { "_normal", "_nor", "_norm", "_nrm", "_normalmap", "_nml", "_bump", "_n" },
-        ["Roughness"] = new() { "_roughness", "_rou", "_rgh", "_gloss", "_gls", "_rough", "_specular" },
-        ["Metal"] = new() { "_metallic", "_met", "_metal", "_mtl", "_metalness", "_metall" },
-        ["SelfIllum"] = new() { "_selfillum", "_illum", "_glowmask", "_emit", "_emissive", "_light" },
-        ["Opacity"] = new() { "_translucent", "_trans", "_opacity", "_opa", "_alpha" },
-    };
+    private Dictionary<string, List<string>>? pbrMap => JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText("Config/FileType.json"));
     // 创建 vmat 文件
     private void CreateVmat(object sender, RoutedEventArgs e)
     {
@@ -56,7 +48,7 @@ public partial class MainWindow
         {
             LogManage.AddLog($"正在处理文件夹：{folder}");
             //判断是叶子文件夹
-            if (Directory.GetDirectories(folder).Length == 0)
+            if (Directory.GetDirectories(folder).Length == 0 && Directory.GetFiles(folder).Length > 0)
             {
                 string TextureColorPath = String.Empty;
                 string TextureAmbientOcclusionPath = String.Empty;
@@ -94,7 +86,7 @@ public partial class MainWindow
                     // 写入文件
                     writer.WriteLine("Layer0");
                     writer.WriteLine("{");
-                    writer.WriteLine("\tshader \"complex.vfx\"");
+                    writer.WriteLine($"\tshader \"{ShaderComboBox.Text}.vfx\"");
                     writer.WriteLine("");
                     writer.WriteLine("\t//---- Ambient Occlusion ----");
                     writer.WriteLine("\tg_flAmbientOcclusionDirectDiffuse \"0.000\"");

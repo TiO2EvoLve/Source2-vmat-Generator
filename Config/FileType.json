@@ -4,6 +4,6 @@
   "Roughness": ["_roughness", "_rough"],
   "AO": ["_ao", "_ambientocclusion"],
   "Metal": ["_metal", "_metallic"],
-  "SelfIllum": ["_emit", "_emissive"],
+  "SelfIllum": ["_emit", "_emissive","_glow"],
   "Opacity": ["_alpha", "_opacity"]
 }

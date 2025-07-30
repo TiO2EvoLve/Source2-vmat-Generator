@@ -20,40 +20,48 @@
                             <StackPanel VerticalAlignment="Top">
                                 <StackPanel Orientation="Horizontal" Margin="0,5">
                                     <TextBlock Text="漫反射贴图" Width="90" VerticalAlignment="Center" />
-                                    <TextBox Text="{Binding BaseColor, UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBox Text="{Binding BaseColor, UpdateSourceTrigger=LostFocus}"
                                              Width="550" Height="35" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,5">
                                     <TextBlock Text="法线贴图" Width="90" VerticalAlignment="Center" />
-                                    <TextBox Text="{Binding Normal, UpdateSourceTrigger=PropertyChanged}" Width="550"
-                                             Height="35" />
+                                    <TextBox Text="{Binding Normal, UpdateSourceTrigger=LostFocus}" 
+                                             Width="550" Height="35" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,5">
                                     <TextBlock Text="粗糙度贴图" Width="90" VerticalAlignment="Center" />
-                                    <TextBox Text="{Binding Roughness, UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBox Text="{Binding Roughness, UpdateSourceTrigger=LostFocus}"
                                              Width="550" Height="35" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,5">
                                     <TextBlock Text="AO贴图" Width="90" VerticalAlignment="Center" />
-                                    <TextBox Text="{Binding AO, UpdateSourceTrigger=PropertyChanged}" Width="550"
-                                             Height="35" />
+                                    <TextBox Text="{Binding AO, UpdateSourceTrigger=LostFocus}"
+                                             Width="550" Height="35" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,5">
                                     <TextBlock Text="金属度贴图" Width="90" VerticalAlignment="Center" />
-                                    <TextBox Text="{Binding Metal, UpdateSourceTrigger=PropertyChanged}" Width="550"
-                                             Height="35" />
+                                    <TextBox Text="{Binding Metal, UpdateSourceTrigger=LostFocus}"
+                                             Width="550" Height="35" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,5">
                                     <TextBlock Text="自发光贴图" Width="90" VerticalAlignment="Center" />
-                                    <TextBox Text="{Binding SelfIllum, UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBox Text="{Binding SelfIllum, UpdateSourceTrigger=LostFocus}"
                                              Width="550" Height="35" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,5">
                                     <TextBlock Text="透明度贴图" Width="90" VerticalAlignment="Center" />
-                                    <TextBox Text="{Binding Opacity, UpdateSourceTrigger=PropertyChanged}" Width="550"
-                                             Height="35" />
+                                    <TextBox Text="{Binding Opacity, UpdateSourceTrigger=LostFocus}" 
+                                             Width="550" Height="35" />
                                 </StackPanel>
-                                <Button HorizontalAlignment="Center" Content="保存配置" Width="100" Margin="10" Click="OnSaveClicked"/>
+                                <ui:Button HorizontalAlignment="Center"
+                                           Background="#FF409EFF"
+                                           Click="OnSaveClicked" 
+                                           Content="保存配置"
+                                           Width="100"
+                                           Height="40"
+                                           MouseOverBackground="#66b1ff"
+                                           Margin="0,20,0,0"
+                                           Foreground="#E4FFFFFF" />
                             </StackPanel>
                         </ui:CardControl.Header>
                     </ui:CardControl>
