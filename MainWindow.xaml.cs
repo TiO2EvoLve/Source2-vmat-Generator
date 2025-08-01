@@ -38,7 +38,23 @@ public partial class MainWindow
         }
     }
 
-    private Dictionary<string, List<string>>? pbrMap => JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText("Config/FileType.json"));
+    private Dictionary<string, List<string>>? pbrMap
+    {
+        get
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText("Config/FileType.json"));
+            }
+            catch (Exception ex)
+            {
+                Message.ShowSnack("错误", $"读取或解析 FileType.json 失败：{ex.Message}", ControlAppearance.Danger,
+                    new SymbolIcon(SymbolRegular.ErrorCircle20), 3);
+                LogManage.AddLog($"解析配置文件FileType.json失败,请检查格式是否正确{ex.Message}");
+                return null;
+            }
+        }
+    }
     // 创建 vmat 文件
     private void CreateVmat(object sender, RoutedEventArgs e)
     {
@@ -46,10 +62,10 @@ public partial class MainWindow
         LogManage.AddLog("开始创建 vmat 文件...");
         foreach (string folder in Directory.EnumerateDirectories("materials", "*", SearchOption.AllDirectories))
         {
-            LogManage.AddLog($"正在处理文件夹：{folder}");
             //判断是叶子文件夹
             if (Directory.GetDirectories(folder).Length == 0 && Directory.GetFiles(folder).Length > 0)
             {
+                LogManage.AddLog($"正在处理文件夹：{folder}");
                 string TextureColorPath = String.Empty;
                 string TextureAmbientOcclusionPath = String.Empty;
                 string TextureNormalPath = String.Empty;
@@ -77,7 +93,13 @@ public partial class MainWindow
                         default: continue;
                     }
                 }
-
+                //必须存在漫反射贴图
+                if (TextureColorPath == "")
+                {
+                    Message.ShowMessageBox("警告",$"{folder}文件夹没有检测到漫反射贴图,请检查或加入配置中");   
+                    LogManage.AddLog($"警告：{folder}文件夹没有检测到漫反射贴图,请检查或加入配置中");
+                    continue;
+                }
                 //创建 vmat 文件
                 var filePath = Path.Combine(folder, $"{Path.GetFileName(folder)}.vmat");
                 using (var writer = new StreamWriter(filePath, false))
@@ -103,10 +125,7 @@ public partial class MainWindow
                     writer.WriteLine("\t//---- Color ----");
                     writer.WriteLine("\tg_flModelTintAmount \"1.000\"");
                     writer.WriteLine("\tg_vColorTint \"[1.000000 1.000000 1.000000 0.000000]\"");
-                    if (TextureColorPath != "")
-                    {
-                        writer.WriteLine($"\tTextureColor \"{TextureColorPath}\"");
-                    }
+                    writer.WriteLine($"\tTextureColor \"{TextureColorPath}\"");
                     writer.WriteLine("");
                     writer.WriteLine("\t//---- Fade ----");
                     writer.WriteLine("\tg_flFadeExponent \"1.000\"");
@@ -159,7 +178,7 @@ public partial class MainWindow
     //匹配文件类型
     string MatchType(string filename)
     {
-        var fileName = Path.GetFileNameWithoutExtension(filename);
+        var fileName = Path.GetFileNameWithoutExtension(filename.ToLower());
         foreach (var (type, suffixes) in pbrMap)
         {
             foreach (var suffix in suffixes)
