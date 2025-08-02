@@ -74,6 +74,7 @@
                            Foreground="#E4FFFFFF" />
                 <ui:Button
                     Grid.Column="4"
+                    Click="ClearDir"
                     Background="#E6A23C"
                     Content="清理目录"
                     MouseOverBackground="#ffbc58"
@@ -111,6 +112,8 @@
             </Grid>
         </Border>
         <!-- 第四行提示幅 -->
-        <Grid Grid.Row="3"><CheckBox Content="SSR"/></Grid>
+        <Grid Grid.Row="3" Margin="10" >
+            <CheckBox Content="启用SSR" IsEnabled="{Binding SSR}" ToolTip="开启后将启用屏幕空间反射（SSR）效果"/>
+        </Grid>
     </Grid>
 </Window>

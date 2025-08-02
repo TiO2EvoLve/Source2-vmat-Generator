@@ -2,6 +2,7 @@
 using Wpf.Ui;
 using Wpf.Ui.Controls;
 using MessageBox = Wpf.Ui.Controls.MessageBox;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 
 namespace MaterialsCreate.Manage;
 
@@ -40,15 +41,17 @@ public class Message
     }
 
     // 显示MessageBox消息框重载
-    public static void ShowMessageBox(string Title, string Content)
+    public static Task<MessageBoxResult>  ShowMessageBox(string Title, string Content)
     {
         var uiMessageBox = new MessageBox
         {
             Title = Title,
             Content = Content,
-            CloseButtonText = "确定"
+            PrimaryButtonText = "确定",
+            CloseButtonText = "取消"
         };
-        uiMessageBox.ShowDialogAsync();
+        var result = uiMessageBox.ShowDialogAsync();
+        return result; 
     }
 
     // 显示Snackbar消息框

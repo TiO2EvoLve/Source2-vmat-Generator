@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -6,11 +7,31 @@ using MaterialsCreate.Manage;
 using Newtonsoft.Json;
 using Tommy;
 using Wpf.Ui.Controls;
+using MessageBoxResult = Wpf.Ui.Controls.MessageBoxResult;
 
 namespace MaterialsCreate;
 
-public partial class MainWindow
+public partial class MainWindow :  INotifyPropertyChanged
 {
+    private bool ssr;
+    public bool SSR
+    {
+        get => ssr;
+        set
+        {
+            if (ssr != value)
+            {
+                ssr = value;
+                OnPropertyChanged(nameof(SSR));
+            }
+        }
+    }
+    public event PropertyChangedEventHandler? PropertyChanged;
+    
+    protected virtual void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
     public MainWindow()
     {
         InitializeComponent();
@@ -48,10 +69,22 @@ public partial class MainWindow
             }
             catch (Exception ex)
             {
+                
                 Message.ShowSnack("错误", $"读取或解析 FileType.json 失败：{ex.Message}", ControlAppearance.Danger,
                     new SymbolIcon(SymbolRegular.ErrorCircle20), 3);
                 LogManage.AddLog($"解析配置文件FileType.json失败,请检查格式是否正确{ex.Message}");
-                return null;
+                LogManage.AddLog($"加载默认配置");
+                //加载默认配置
+                return new Dictionary<string, List<string>>
+                {
+                    ["BaseColor"] = ["_albedo", "_diffuse", "_basecolor", "_color", "_col", "_bc", "_diff"],
+                    ["AO"] = ["_ao", "_ambientocclusion", "_occlusion", "_ambocc", "_aoc", "_occl"],
+                    ["Normal"] = ["_normal", "_nor", "_norm", "_nrm", "_normalmap", "_nml", "_bump", "_n"],
+                    ["Roughness"] = ["_roughness", "_rou", "_rgh", "_gloss", "_gls", "_rough", "_specular"],
+                    ["Metal"] = ["_metallic", "_met", "_metal", "_mtl", "_metalness", "_metall"],
+                    ["SelfIllum"] = ["_selfillum", "_illum", "_glowmask", "_emit", "_emissive", "_light"],
+                    ["Opacity"] = ["_translucent", "_trans", "_opacity", "_opa", "_alpha"],
+                };
             }
         }
     }
@@ -227,26 +260,70 @@ public partial class MainWindow
         {
             var selectGame = selectedItem.Content.ToString() ?? throw new InvalidOperationException();
             // 读取配置文件
-            var configPath = "Config/config.toml";
-            if (!File.Exists(configPath)) return;
-
-            TextReader reader = new StreamReader(configPath);
-            var table = TOML.Parse(reader);
-
-            if (table[selectGame] is TomlTable gameSection &&
-                gameSection["Shader"] is TomlArray shaderArray)
+            try
             {
-                ShaderComboBox.Items.Clear();
+                var configPath = "Config/config.toml";
+                if (!File.Exists(configPath)) return;
 
-                foreach (var shader in shaderArray)
+                TextReader reader = new StreamReader(configPath);
+                var table = TOML.Parse(reader);
+
+                if (table[selectGame] is TomlTable gameSection &&
+                    gameSection["Shader"] is TomlArray shaderArray)
                 {
-                    ShaderComboBox.Items.Add(new ComboBoxItem
+                    ShaderComboBox.Items.Clear();
+
+                    foreach (var shader in shaderArray)
                     {
-                        Content = shader.ToString()
-                    });
+                        ShaderComboBox.Items.Add(new ComboBoxItem
+                        {
+                            Content = shader.ToString()
+                        });
+                    }
+                    ShaderComboBox.SelectedIndex = 0;
                 }
-                ShaderComboBox.SelectedIndex = 0;
+                SSR = table[selectGame]["SSR"];
             }
+            catch (Exception exception)
+            {
+                LogManage.AddLog($"读取配置文件失败: {exception.Message}");
+                Message.ShowSnack("错误", "读取配置文件失败，请检查文件格式。", ControlAppearance.Danger,
+                    new SymbolIcon(SymbolRegular.ErrorCircle20), 3);
+            }
+            
+        }
+    }
+
+    private void ClearDir(object sender, RoutedEventArgs e)
+    {
+        //先弹出二次确认页面
+        var result = Message.ShowMessageBox("确认", "是否清除 materials 文件夹下的所有 vmat 文件？");
+        if (result.Result != MessageBoxResult.Primary) return;
+        //清除 materials 文件夹下的所有 vmat 文件
+        var folderPath = "materials";
+        if (Directory.Exists(folderPath))
+        {
+            var vmatFiles = Directory.GetFiles(folderPath, "*.vmat", SearchOption.AllDirectories);
+            foreach (var file in vmatFiles)
+            {
+                try
+                {
+                    File.Delete(file);
+                    LogManage.AddLog($"已删除文件: {file}");
+                }
+                catch (Exception ex)
+                {
+                    LogManage.AddLog($"删除文件失败: {file}, 错误: {ex.Message}");
+                }
+            }
+            Message.ShowSnack("提示", "已清除所有 vmat 文件。", ControlAppearance.Success,
+                new SymbolIcon(SymbolRegular.CheckmarkCircle20), 3);
+        }
+        else
+        {
+            LogManage.AddLog("materials 文件夹不存在");
+            Message.ShowSnack("错误", "materials 文件夹不存在", ControlAppearance.Danger,
+                new SymbolIcon(SymbolRegular.ErrorCircle20), 3);
         }
     }
 }

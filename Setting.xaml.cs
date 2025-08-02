@@ -40,13 +40,13 @@ public partial class Setting
             // 默认结构
             var dict = new Dictionary<string, List<string>>
             {
-                ["BaseColor"] = new() { "_albedo", "_diffuse", "_basecolor", "_color", "_col", "_bc", "_diff" },
-                ["AO"] = new() { "_ao", "_ambientocclusion", "_occlusion", "_ambocc", "_aoc", "_occl" },
-                ["Normal"] = new() { "_normal", "_nor", "_norm", "_nrm", "_normalmap", "_nml", "_bump", "_n" },
-                ["Roughness"] = new() { "_roughness", "_rou", "_rgh", "_gloss", "_gls", "_rough", "_specular" },
-                ["Metal"] = new() { "_metallic", "_met", "_metal", "_mtl", "_metalness", "_metall" },
-                ["SelfIllum"] = new() { "_selfillum", "_illum", "_glowmask", "_emit", "_emissive", "_light" },
-                ["Opacity"] = new() { "_translucent", "_trans", "_opacity", "_opa", "_alpha" },
+                ["BaseColor"] = ["_albedo", "_diffuse", "_basecolor", "_color", "_col", "_bc", "_diff"],
+                ["AO"] = ["_ao", "_ambientocclusion", "_occlusion", "_ambocc", "_aoc", "_occl"],
+                ["Normal"] = ["_normal", "_nor", "_norm", "_nrm", "_normalmap", "_nml", "_bump", "_n"],
+                ["Roughness"] = ["_roughness", "_rou", "_rgh", "_gloss", "_gls", "_rough", "_specular"],
+                ["Metal"] = ["_metallic", "_met", "_metal", "_mtl", "_metalness", "_metall"],
+                ["SelfIllum"] = ["_selfillum", "_illum", "_glowmask", "_emit", "_emissive", "_light"],
+                ["Opacity"] = ["_translucent", "_trans", "_opacity", "_opa", "_alpha"],
             };
             _viewModel.Load(dict);
         }
