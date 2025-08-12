@@ -143,6 +143,20 @@ public partial class MainWindow :  INotifyPropertyChanged
                     writer.WriteLine("{");
                     writer.WriteLine($"\tshader \"{ShaderComboBox.Text}.vfx\"");
                     writer.WriteLine("");
+                    if (TextureMetalnessPath != "")
+                    {
+                        writer.WriteLine("\tF_METALNESS_TEXTURE 1\n");
+                        writer.WriteLine("\tF_SPECULAR 1\n"); 
+                    }
+
+                    if (TextureSelfIlluminationPath !="")
+                    {
+                        writer.WriteLine("\tF_SELF_ILLUM 1\n");
+                    }
+                    if (TextureOpacityPath != "")
+                    {
+                        writer.WriteLine("\tF_TRANSLUCENT 1\n");
+                    }
                     writer.WriteLine("\t//---- Ambient Occlusion ----");
                     writer.WriteLine("\tg_flAmbientOcclusionDirectDiffuse \"0.000\"");
                     writer.WriteLine("\tg_flAmbientOcclusionDirectSpecular \"0.000\"");
@@ -171,7 +185,14 @@ public partial class MainWindow :  INotifyPropertyChanged
                     writer.WriteLine("\tg_flDirectionalLightmapStrength \"1.000\"");
                     writer.WriteLine("");
                     writer.WriteLine("\t//---- Metalness ----");
-                    writer.WriteLine("\tg_flMetalness \"0.000\"");
+                    if (TextureMetalnessPath != "")
+                    {
+                        writer.WriteLine($"\tTextureMetalness \"{TextureMetalnessPath}\"");
+                    }
+                    else
+                    {
+                        writer.WriteLine("\tg_flMetalness \"0.000\"");
+                    }
                     writer.WriteLine("");
                     writer.WriteLine("\t//---- Normal ----");
                     if (TextureNormalPath != "")
@@ -192,6 +213,19 @@ public partial class MainWindow :  INotifyPropertyChanged
                     {
                         writer.WriteLine("\tTextureRoughness \"materials/default/default_rough.tga\"");
                     }
+
+                    if (TextureSelfIlluminationPath != "")
+                    {
+                        writer.WriteLine("\t//---- Self Illumination ----");
+                        writer.WriteLine($"\tg_flSelfIllumAlbedoFactor \"1.000\"");
+                        writer.WriteLine($"\tg_flSelfIllumBrightness \"0.000\"");
+                        writer.WriteLine($"\tg_flSelfIllumScale \"1.000\"");
+                        writer.WriteLine($"\tg_vSelfIllumScrollSpeed \"[0.000 0.000]\"");
+                        writer.WriteLine($"\tg_vSelfIllumTint \"[1.000000 1.000000 1.000000 0.000000]\"");
+                        writer.WriteLine($"\tTextureSelfIllumMask \"{TextureSelfIlluminationPath}\"");
+                    }
+
+                    
                     writer.WriteLine("");
                     writer.WriteLine("\t//---- Texture Coordinates ----");
                     writer.WriteLine("\tg_nScaleTexCoordUByModelScaleAxis \"0\"");
@@ -199,6 +233,13 @@ public partial class MainWindow :  INotifyPropertyChanged
                     writer.WriteLine("\tg_vTexCoordOffset \"[0.000 0.000]\"");
                     writer.WriteLine("\tg_vTexCoordScale \"[1.000 1.000]\"");
                     writer.WriteLine("\tg_vTexCoordScrollSpeed \"[0.000 0.000]\"");
+                    
+                    if (TextureOpacityPath != "")
+                    {
+                        writer.WriteLine($"\tg_flOpacityScale \"1.000\"");
+                        writer.WriteLine($"\tTextureTranslucency \"{TextureOpacityPath}\"");
+                    }
+                    
                     writer.WriteLine("}");
                 }
             }
